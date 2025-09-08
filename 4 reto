@@ -1,0 +1,21 @@
+const int sensor_pin = 8;
+int cambios = 0;
+int estadoAnterior = HIGH; 
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(sensor_pin, INPUT);
+}
+
+void loop() {
+  int estadoActual = digitalRead(sensor_pin);
+
+  if (estadoAnterior == HIGH && estadoActual == LOW) {
+    cambios++;
+    Serial.print("Objeto detectado: ");
+    Serial.println(cambios);
+  }
+
+  estadoAnterior = estadoActual; 
+  delay(50); 
+}
