@@ -1,0 +1,58 @@
+const int trigPin = 9;
+const int echoPin = 10;
+const int led_1= 3;
+const int led_2= 5;
+const int led_3= 6;
+const int pulsador=8;
+
+float duration, distance; 
+int estado;
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(led_1, OUTPUT);
+  pinMode(led_2, OUTPUT);
+  pinMode(led_3, OUTPUT);
+  pinMode(pulsador, INPUT_PULLUP);
+  Serial.begin(9600);
+}
+
+void loop() {
+  estado = digitalRead(pulsador);
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = (duration * 0.0343) / 2; 
+  
+  if (estado==LOW){
+    analogWrite(led_1, 70);
+    analogWrite(led_2, 55);
+    analogWrite(led_3, 40);
+  }else if (distance>=90){
+    analogWrite(led_1, 255 );
+    analogWrite(led_2, 55);
+    analogWrite(led_3, 40);
+    Serial.print("la distancia es mayor a 90cm ");
+
+  }else if (distance > 30) {
+    analogWrite(led_1, 70);
+    analogWrite(led_2, 255);
+    analogWrite(led_3, 20);
+    Serial.print("la distancia es entre 90cm y 30cm:");
+  }
+  else  {
+    analogWrite(led_1, 85);
+    analogWrite(led_2, 55);
+    analogWrite(led_3, 255);
+    Serial.print("la distancia es menor a 30cm:");
+
+  }
+
+  
+  Serial.println(distance);
+  delay(100);
+}
