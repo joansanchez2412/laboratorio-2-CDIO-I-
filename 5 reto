@@ -1,0 +1,44 @@
+const int movimiento=2;
+const int trig=9;
+const int echo=10;
+
+float duracion, distancia;
+int imprimir=HIGH;
+int estado;
+void setup() {
+  pinMode(trig, OUTPUT);
+  pinMode(echo, INPUT);
+  pinMode(movimiento, INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int sensor_movimiento=digitalRead(movimiento);
+  if (imprimir == HIGH && sensor_movimiento == LOW){
+    Serial.println("se ha detectado un objeto" );
+  }
+  if (sensor_movimiento==LOW){
+
+    delay(200);
+    digitalWrite(trig, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trig, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trig, LOW);
+    
+    duracion = pulseIn(echo, HIGH);
+    distancia = (duracion * 0.0343) / 2; 
+    if (distancia>0){
+      Serial.print("la distancia del objeto es:");
+      Serial.println(distancia);
+    }else{
+      Serial.print("no hay distancia establecida");
+    }
+    delay(200);
+  }else{
+    Serial.println("no se ha detectado ningun objeto");
+  }
+
+  imprimir= sensor_movimiento;
+  delay(500);
+}
